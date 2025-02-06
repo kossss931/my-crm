@@ -11,9 +11,13 @@ const path = require('path');
 const cron = require('node-cron');
 require('dotenv').config(); // чтение .env
 
+const path = require('path');
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 
 // Путь к базе данных
