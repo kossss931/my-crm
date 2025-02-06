@@ -1,21 +1,20 @@
 /**
  * server.js
- * Вся статика + серверный код в одной папке.
+ * Сервер + статика в одной папке, готовое к деплою на Render.
  */
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
-require('dotenv').config(); // Читаем .env (PORT, CRON_ENABLED и т.д.)
+require('dotenv').config(); // Читаем .env (PORT, CRON_ENABLED)
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Файл базы данных
+// Путь к файлу базы
 const DB_FILE = path.join(__dirname, 'database.json');
 
 // Функции чтения/записи
@@ -53,13 +52,13 @@ function writeDatabase(data) {
 
 // --- API ---
 
-// Отдаём структуру данных
+// Получить все данные
 app.get('/api/data', (req, res) => {
   const db = readDatabase();
   res.json(db);
 });
 
-// Обновление общих настроек: бюджет, аренда, цель
+// Обновить настройки (бюджет, аренду, цель)
 app.post('/api/updateConfig', (req, res) => {
   const db = readDatabase();
   const { budget, monthlyRent, monthlyIncomeGoal } = req.body;
@@ -72,77 +71,77 @@ app.post('/api/updateConfig', (req, res) => {
   res.json({ success: true, data: db });
 });
 
-// Добавление дохода
+// Добавить доход
 app.post('/api/addIncome', (req, res) => {
   const db = readDatabase();
   const { amount, source } = req.body;
-  const newInc = {
+  const newIncome = {
     id: db.lastIncomeId++,
     amount: Number(amount),
     source: source || 'Не указано',
     date: new Date().toISOString()
   };
-  db.incomes.push(newInc);
-  db.budget += newInc.amount;
+  db.incomes.push(newIncome);
+  db.budget += newIncome.amount;
   writeDatabase(db);
   res.json({ success: true, data: db });
 });
 
-// Редактирование дохода
+// Редактировать доход
 app.post('/api/editIncome', (req, res) => {
   const db = readDatabase();
   const { id, amount, source } = req.body;
   const idx = db.incomes.findIndex(i => i.id === id);
   if (idx !== -1) {
-    // Возвращаем старую сумму в бюджет
+    // Вернуть старую сумму в бюджет
     const oldAmount = db.incomes[idx].amount;
     db.budget -= oldAmount;
-    // Заменяем на новую
+    // Новые данные
     db.incomes[idx].amount = Number(amount);
     db.incomes[idx].source = source || 'Не указано';
-    // Прибавляем новую сумму
+    // Прибавляем заново
     db.budget += db.incomes[idx].amount;
   }
   writeDatabase(db);
   res.json({ success: true, data: db });
 });
 
-// Добавление расхода
+// Добавить расход
 app.post('/api/addExpense', (req, res) => {
   const db = readDatabase();
   const { amount, category } = req.body;
-  const newExp = {
+  const newExpense = {
     id: db.lastExpenseId++,
     amount: Number(amount),
     category: category || 'Не указано',
     date: new Date().toISOString()
   };
-  db.expenses.push(newExp);
-  db.budget -= newExp.amount;
+  db.expenses.push(newExpense);
+  db.budget -= newExpense.amount;
   writeDatabase(db);
   res.json({ success: true, data: db });
 });
 
-// Редактирование расхода
+// Редактировать расход
 app.post('/api/editExpense', (req, res) => {
   const db = readDatabase();
   const { id, amount, category } = req.body;
   const idx = db.expenses.findIndex(e => e.id === id);
   if (idx !== -1) {
-    // Возвращаем старую сумму
+    // Вернуть старую сумму
     const oldAmount = db.expenses[idx].amount;
     db.budget += oldAmount;
-    // Заменяем на новую
+    // Новые данные
     db.expenses[idx].amount = Number(amount);
     db.expenses[idx].category = category || 'Не указано';
-    // Снова вычитаем
+    // Снова вычесть
     db.budget -= db.expenses[idx].amount;
   }
   writeDatabase(db);
   res.json({ success: true, data: db });
 });
 
-// Добавление задачи
+// Добавить задачу
 app.post('/api/addTask', (req, res) => {
   const db = readDatabase();
   const { title, description } = req.body;
@@ -158,7 +157,7 @@ app.post('/api/addTask', (req, res) => {
   res.json({ success: true, data: db });
 });
 
-// Обновление статуса задачи
+// Обновить статус задачи
 app.post('/api/updateTask', (req, res) => {
   const db = readDatabase();
   const { id, status } = req.body;
@@ -170,7 +169,7 @@ app.post('/api/updateTask', (req, res) => {
   res.json({ success: true, data: db });
 });
 
-// Редактирование задачи
+// Редактировать задачу
 app.post('/api/editTask', (req, res) => {
   const db = readDatabase();
   const { id, title, description } = req.body;
@@ -198,9 +197,9 @@ app.get('/api/export/csv', (req, res) => {
   res.send(csv);
 });
 
-// Авто-списание аренды, если CRON_ENABLED=true в .env
+// Авто-списание аренды (если CRON_ENABLED=true)
 if (process.env.CRON_ENABLED === 'true') {
-  // Каждый месяц, 1-го числа в 09:00
+  // 1 числа каждого месяца в 09:00
   cron.schedule('0 9 1 * *', () => {
     console.log('[CRON] Списываем аренду...');
     const db = readDatabase();
@@ -215,23 +214,16 @@ if (process.env.CRON_ENABLED === 'true') {
   });
 }
 
-// --- Раздача статических файлов (index.html, style.css, script.js и т.п.) ---
-
-// 1) Делаем папку проекта статической
+// --- Раздача статических файлов (index.html, style.css, script.js и т.д.) ---
 app.use(express.static(__dirname));
 
-// 2) Ловим корневой маршрут
+// При обращении к корню отдаём index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// (необязательно) если нужно, чтобы при любом неизвестном пути отдавался index.html:
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'index.html'));
-// });
-
-// --- Запуск сервера ---
+// Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Сервер запущен на http://localhost:${PORT}`);
+  console.log(`Сервер запущен. Порт: ${PORT}.`);
 });
