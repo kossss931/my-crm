@@ -14,7 +14,10 @@ require('dotenv').config(); // чтение .env
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'index.html')));
+const path = require('path');
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 
 // Путь к базе данных
