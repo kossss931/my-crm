@@ -14,7 +14,6 @@ require('dotenv').config(); // чтение .env
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static 'index.html');
 
 
 // Путь к базе данных
