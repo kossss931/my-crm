@@ -1,137 +1,116 @@
+/* style.css */
+
 body {
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-  }
-  
-  .container {
-    width: 90%;
-    max-width: 1000px;
-    margin: 20px auto;
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    padding: 20px;
-  }
-  
-  h1, h2, h3 {
-    margin-top: 0;
-    font-weight: 600;
-  }
-  
-  .section {
-    background-color: #fafafa;
-    border-radius: 10px;
-    padding: 15px;
-    margin-top: 20px;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  input[type="text"],
-  input[type="number"] {
-    width: 200px;
-    padding: 7px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-top: 5px;
-  }
-  
-  button {
-    background-color: #007aff;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 7px 15px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    margin-top: 5px;
-  }
-  button:hover {
-    opacity: 0.9;
-  }
-  
-  /* Таблицы */
-  table {
-    width: 100%;
-    margin-top: 10px;
-    border-collapse: collapse;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  
-  table thead {
-    background-color: #eee;
-  }
-  
-  table th, table td {
-    padding: 8px 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  table th {
-    font-weight: 600;
-  }
-  
-  /* Статус задачи */
-  .status-cell {
-    display: inline-block;
-    padding: 5px 8px;
-    color: #fff;
-    border-radius: 5px;
-    font-weight: 500;
-  }
-  .status-pending {
-    background-color: #f0ad4e;
-  }
-  .status-in-progress {
-    background-color: #007aff;
-  }
-  .status-done {
-    background-color: #5cb85c;
-  }
-  
-  /* Гибкая сетка */
-  .flex-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  
-  /* Модалки */
-  .modal {
-    position: fixed;
-    z-index: 9999;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0,0,0,0.3);
-  }
-  .modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-  }
-  .modal-close {
-    position: absolute;
-    top: 10px; right: 10px;
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
+  margin: 0;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+.section {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+label {
+  display: block;
+  margin-top: 8px;
+}
+
+input[type="number"], input[type="text"] {
+  width: 200px;
+  padding: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
+
+button {
+  background-color: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 15px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+button:hover {
+  opacity: 0.9;
+}
+
+/* Таблицы */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 5px;
+  overflow: hidden;
+}
+table thead {
+  background-color: #eee;
+}
+table th, table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Статус задачи (цветной фон) */
+.status-cell {
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: #fff;
+}
+.status-pending {
+  background-color: #f0ad4e;
+}
+.status-in-progress {
+  background-color: #007aff;
+}
+.status-done {
+  background-color: #5cb85c;
+}
+
+/* Утилита */
+.flex-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Модальные окна */
+.modal {
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.3);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+.modal-close {
+  position: absolute;
+  top: 10px; right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
