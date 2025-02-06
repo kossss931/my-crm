@@ -47,6 +47,12 @@ button:hover {
   opacity: 0.9;
 }
 
+.flex-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 /* Таблицы */
 table {
   width: 100%;
@@ -64,7 +70,7 @@ table th, table td {
   border-bottom: 1px solid #ddd;
 }
 
-/* Статус задачи (цветной фон) */
+/* Статусы задач */
 .status-cell {
   padding: 5px 8px;
   border-radius: 5px;
@@ -80,14 +86,7 @@ table th, table td {
   background-color: #5cb85c;
 }
 
-/* Утилита */
-.flex-row {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-/* Модальные окна */
+/* Модалки */
 .modal {
   position: fixed;
   left: 0; top: 0;
