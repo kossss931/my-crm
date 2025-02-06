@@ -1,6 +1,7 @@
 {
   "name": "my-crm",
   "version": "1.0.0",
+  "description": "CRM-программа в одной папке, готовая к деплою на Render",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
