@@ -7,11 +7,11 @@ let currentEditIncomeId = null;
 let currentEditExpenseId = null;
 let currentEditTaskId = null;
 
-// Запрос всех данных при загрузке
 window.addEventListener('load', () => {
   fetchData();
 });
 
+// 1. Получить все данные
 function fetchData() {
   fetch('/api/data')
     .then(r => r.json())
@@ -27,13 +27,13 @@ function renderData() {
   document.getElementById('currentBudget').textContent = globalData.budget;
   document.getElementById('currentRent').textContent = globalData.monthlyRent;
   document.getElementById('currentGoal').textContent = globalData.goals.monthlyIncomeGoal;
-
+  
   renderIncomes();
   renderExpenses();
   renderTasks();
 }
 
-// ---- Доходы ----
+// --- Доходы ---
 function renderIncomes() {
   const tbody = document.querySelector('#incomesTable tbody');
   tbody.innerHTML = '';
@@ -59,7 +59,7 @@ function addIncome() {
   }
   fetch('/api/addIncome', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ amount, source })
   })
     .then(r => r.json())
@@ -89,7 +89,7 @@ function saveIncomeChanges() {
   const source = document.getElementById('editIncomeSource').value;
   fetch('/api/editIncome', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ id: currentEditIncomeId, amount, source })
   })
     .then(r => r.json())
@@ -104,7 +104,7 @@ function saveIncomeChanges() {
     .catch(e => console.error(e));
 }
 
-// ---- Расходы ----
+// --- Расходы ---
 function renderExpenses() {
   const tbody = document.querySelector('#expensesTable tbody');
   tbody.innerHTML = '';
@@ -130,7 +130,7 @@ function addExpense() {
   }
   fetch('/api/addExpense', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ amount, category })
   })
     .then(r => r.json())
@@ -160,7 +160,7 @@ function saveExpenseChanges() {
   const category = document.getElementById('editExpenseCategory').value;
   fetch('/api/editExpense', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ id: currentEditExpenseId, amount, category })
   })
     .then(r => r.json())
@@ -175,7 +175,7 @@ function saveExpenseChanges() {
     .catch(e => console.error(e));
 }
 
-// ---- Задачи ----
+// --- Задачи ---
 function renderTasks() {
   const tbody = document.querySelector('#tasksTable tbody');
   tbody.innerHTML = '';
@@ -208,7 +208,7 @@ function addTask() {
   }
   fetch('/api/addTask', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ title, description })
   })
     .then(r => r.json())
@@ -227,7 +227,7 @@ function addTask() {
 function updateTaskStatus(id, status) {
   fetch('/api/updateTask', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ id, status })
   })
     .then(r => r.json())
@@ -255,7 +255,7 @@ function saveTaskChanges() {
   const description = document.getElementById('editTaskDescription').value;
   fetch('/api/editTask', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ id: currentEditTaskId, title, description })
   })
     .then(r => r.json())
@@ -270,7 +270,6 @@ function saveTaskChanges() {
     .catch(e => console.error(e));
 }
 
-// Для статуса задач
 function getStatusText(status) {
   switch (status) {
     case 'pending': return 'В ожидании';
@@ -301,7 +300,6 @@ function renderCharts() {
   const expenseData = globalData.expenses.map(e => e.amount);
   const expenseLabels = globalData.expenses.map(e => `№${e.id}`);
 
-  // График доходов
   incomeChart = new Chart(ctxIncome, {
     type: 'bar',
     data: {
@@ -315,7 +313,6 @@ function renderCharts() {
     options: { scales: { y: { beginAtZero: true } } }
   });
 
-  // График расходов
   expenseChart = new Chart(ctxExpense, {
     type: 'bar',
     data: {
